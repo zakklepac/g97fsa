@@ -20,4 +20,28 @@ app.get('/lend', (req, res) => {
     res.send({ express: 'lending page'})
 });
 
+app.get("/cats", (req, res, next) => {
+    knex("cats")
+      .then(cats => {
+        res.send({ cats });
+      })
+      .catch(err => {
+        next(err);
+      });
+  });
 
+app.post("/cats", (req, res, next) => {
+    knex('cats')
+        .insert({
+            name: req.body.name,
+            owner: req.body.owner,
+            image: req.body.image,
+            description: req.body.description
+        }, '*')
+        .then((cats) => {
+            res.send(cats);
+        })
+        .catch((err) => {
+        next(err);
+    });
+});
