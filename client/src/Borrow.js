@@ -4,7 +4,7 @@ class Borrow extends Component {
   render() {
     return (
       <div>
-        <h2>BORROW</h2>
+        <h2>Borrow</h2>
             <p>put cat logic here</p>
       </div>
     );
