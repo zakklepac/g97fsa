@@ -12,15 +12,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // create a GET route
-app.get('/borrow', (req, res) => {
-  res.send({ express: 'wired up' });
-})
+// app.get('/borrow', (req, res) => {
+//   res.send({ express: 'wired up' });
+// })
 
 app.get('/lend', (req, res) => {
     res.send({ express: 'lending page'})
 });
 
-app.get("/cats", (req, res, next) => {
+app.get("/borrow", (req, res, next) => {
     knex("cats")
       .then(cats => {
         res.send({ cats });
@@ -30,7 +30,7 @@ app.get("/cats", (req, res, next) => {
       });
   });
 
-app.post("/cats", (req, res, next) => {
+app.post("/lend", (req, res, next) => {
     knex('cats')
         .insert({
             name: req.body.name,
@@ -39,9 +39,19 @@ app.post("/cats", (req, res, next) => {
             description: req.body.description
         }, '*')
         .then((cats) => {
-            res.send(cats);
+            res.send({ cats });
         })
         .catch((err) => {
         next(err);
+    });
+});
+
+app.delete('/borrow', (req, res) => {
+    knex('cats').where('cats.id', req.params.id).del()
+    .then((cats) => {
+        res.send({ cats });
+    })
+    .catch((err) => {
+    next(err);
     });
 });
