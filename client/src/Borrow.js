@@ -41,7 +41,10 @@ class Borrow extends Component {
         <ul>
           {cats.map(cat => (
             <li key={cat.name}>
-              {cat.name} {cat.owner} {cat.image} {cat.description}
+              {cat.image} 
+              {cat.name} 
+              {cat.owner} 
+              {cat.description}
             </li>
           ))}
         </ul>

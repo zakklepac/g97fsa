@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import Validation from 'react-validation';
 
- 
 class Lend extends Component {
   constructor(props) {
     super(props)
