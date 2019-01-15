@@ -62,6 +62,9 @@ class Lend extends Component {
             value={this.state.description}
             onChange={this.handleInputChange} />
         </label>
+        <br />
+        <br />
+        <input type="submit" value="Submit" />
       </form>
     );
   }

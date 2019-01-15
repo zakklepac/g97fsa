@@ -2,34 +2,54 @@ import React, { Component } from "react";
  
 class Borrow extends Component {
 
-  state ={
-    data: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null,
+      isLoaded: false,
+      cats: []
+    };
+  }
 
   componentDidMount() {
-    // Call our fetch function below once the component mounts
-  this.callBackendAPI()
-    .then(res => this.setState({ data: res.express }))
-    .catch(err => console.log(err));
-}
-  // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
-  callBackendAPI = async () => {
-    const response = await fetch('/borrow');
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message) 
-    }
-    return body;
-  };
+    fetch("/borrow")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoaded: true,
+            cats: result.cats
+          });
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
 
   render() {
-    return (
-      <div>
-        <h2>Borrow</h2>
-        <p className="App-intro">{this.state.data}</p>
-      </div>
-    );
+    const { error, isLoaded, cats } = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+      return <div>Loading...</div>;
+    } else {
+      return (
+        <ul>
+          {cats.map(cat => (
+            <li key={cat.name}>
+              {cat.name} {cat.owner} {cat.image} {cat.description}
+            </li>
+          ))}
+        </ul>
+      );
+    }
   }
   
 }
