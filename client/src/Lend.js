@@ -1,73 +1,66 @@
 import React, { Component } from "react";
+import Validation from 'react-validation';
 
  
 class Lend extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      name: "name",
-      email: "owner email",
-      image: "image url",
-      description: "brief description"
-    };
+        name: '',
+        owner: '',
+        image: '',
+        description: '',
+    }
+    this.handleSubmit = this.handleSubmit.bind(this)
+}
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
+handleSubmit(event) {
+    event.preventDefault()
+    let data = {
+        name: this.state.name,
+        owner: this.state.email,
+        image: this.state.image,
+        description: this.state.description
+    }
+    console.log(data)
+    fetch("/lend", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    }).then(function(response) {
+        if (response.status >= 400) {
+          throw new Error("Bad response from server");
+        }
+        return response.json();
+    }).then(function(data) {
+        console.log(data)    
+        if(data === "success"){
+           this.setState({msg: "Thanks for lending a cat"});  
+        }
+    }).catch(function(err) {
+        console.log(err)
     });
-  }
+}
 
-  render() {
-    return (
-      <form>
-        <label>
-          Cat Name:
-          <input
-            name="name"
-            type="text"
-            value={this.state.name}
-            onChange={this.handleInputChange} />
-        </label>
-        <br />
-        <label>
-          Owner Email:
-          <input
-            name="email"
-            type="text"
-            value={this.state.email}
-            onChange={this.handleInputChange} />
-        </label>
-        <br />
-        <label>
-          Image URL:
-          <input
-            name="image"
-            type="text"
-            value={this.state.image}
-            onChange={this.handleInputChange} />
-        </label>
-        <br />
-        <label>
-          Brief Description:
-          <input
-            name="description"
-            type="text"
-            value={this.state.description}
-            onChange={this.handleInputChange} />
-        </label>
-        <br />
-        <br />
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  }
+logChange(e) {
+    this.setState({[e.target.name]: e.target.value});  
+}
+
+render() {
+  return (
+   
+    <div id="lend">
+     <form onSubmit={this.handleSubmit}>
+         <input ref={(ref) => {this.name = ref}} placeholder="Cat Name" type="text" name="name"/><br />
+         <input ref={(ref) => {this.owner = ref}} placeholder="Owner's Email" type="text" name="owner"/><br />
+         <input ref={(ref) => {this.image = ref}} placeholder="Cat Image URL" type="text" name="image"/><br />
+         <input ref={(ref) => {this.description = ref}} placeholder="Description" type="text" name="description"/><br />
+        <button type="Submit">Start</button>
+     </form>
+ ​
+    </div>
+   )
+}
 }
  
 export default Lend;

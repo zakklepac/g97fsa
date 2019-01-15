@@ -3,7 +3,7 @@ body {
   padding: 20px;
   margin: 0;
 }
-h1, h2, p, ul, li {
+h1, h2, p, ul, li, form, input {
   font-family: sans-serif;
 }
 ul.header li {
